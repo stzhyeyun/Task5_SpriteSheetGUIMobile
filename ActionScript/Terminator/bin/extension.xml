@@ -1,0 +1,13 @@
+<extension xmlns="http://ns.adobe.com/air/extension/3.1"> 
+    <id>com.bamkie.Terminator</id> 
+    <versionNumber>0.0.1</versionNumber> 
+    <platforms> 
+        <platform name="Android-ARM"> 
+            <applicationDeployment> 
+                <nativeLibrary>Terminator.jar</nativeLibrary> 
+                <initializer>com.bamkie.terminator.TerminatorExtension</initializer>
+				<finalizer>com.bamkie.terminator.TerminatorExtension</finalizer> 
+            </applicationDeployment> 
+        </platform> 
+    </platforms> 
+</extension>

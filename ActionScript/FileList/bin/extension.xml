@@ -1,0 +1,13 @@
+<extension xmlns="http://ns.adobe.com/air/extension/3.6"> 
+    <id>com.bamkie.FileList</id> 
+    <versionNumber>0.0.1</versionNumber> 
+    <platforms> 
+        <platform name="Android-ARM"> 
+            <applicationDeployment> 
+                <nativeLibrary>FileList.jar</nativeLibrary> 
+                <initializer>com.bamkie.filelist.FileListExtension</initializer>
+				<finalizer>com.bamkie.filelist.FileListExtension</finalizer> 
+            </applicationDeployment> 
+        </platform> 
+    </platforms> 
+</extension>
