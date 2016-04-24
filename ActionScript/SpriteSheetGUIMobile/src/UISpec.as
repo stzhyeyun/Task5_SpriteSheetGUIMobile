@@ -87,22 +87,22 @@ package
 		{
 			_screenWidth = screenWidth;
 			_screenHeight = screenHeight;	
-			
-			var actualViewAreaRatio:Number = 0.85;
-			
+						
 			_viewAreaX = 0;
 			_viewAreaY = 0;
 			_viewAreaWidth = _screenHeight;
 			_viewAreaHeight = _screenHeight;
-			_actualViewAreaWidth = _viewAreaWidth * actualViewAreaRatio;
-			_actualViewAreaHeight = _viewAreaHeight * actualViewAreaRatio;
-			
+		
+			var actualViewAreaRatio:Number = 0.85;
 			var selectionBtnWidth:Number = (_screenWidth - _viewAreaWidth) * 0.8;
 			var selectionBtnHeight:Number = _screenHeight * 0.1;
 			var margin:Number = (_screenWidth - _viewAreaWidth - selectionBtnWidth) / 2;
 			var modeBtnWidth:Number = (selectionBtnWidth - margin) / 2;
 			var modeBtnHeight:Number = selectionBtnHeight;			
 			var modeBtnY:Number = _screenHeight - margin * 1.5 - modeBtnHeight;
+			
+			_actualViewAreaWidth = _viewAreaWidth * actualViewAreaRatio;
+			_actualViewAreaHeight = modeBtnY * actualViewAreaRatio;
 			
 			_importButtonX = _viewAreaWidth + margin;
 			_importButtonY = margin;
@@ -129,33 +129,32 @@ package
 			_imageButtonWidth = modeBtnWidth;
 			_imageButtonHeight = modeBtnHeight;
 			
-			var animCtrlMargin:Number = margin * 2;
-			var imageCtrlMargin:Number = margin * 4;
-			var ctrlBtnSize:Number = _viewAreaHeight * 0.05;
-			var ctrlBtnY:Number = _screenHeight - margin - ctrlBtnSize;
+			var imageCtrlMargin:Number = margin * 2;
+			var ctrlBtnSize:Number = modeBtnHeight;
+			var ctrlBtnY:Number = modeBtnY;
 			
-			_playButtonX = animCtrlMargin;
-			_playButtonY = modeBtnY;
+			_playButtonX = margin;
+			_playButtonY = ctrlBtnY;
 			_playButtonWidth = ctrlBtnSize;
 			_playButtonHeight = ctrlBtnSize;
 			
-			_stopButtonX = _playButtonX + _playButtonWidth + animCtrlMargin;
-			_stopButtonY = modeBtnY;
+			_stopButtonX = _playButtonX + _playButtonWidth + margin;
+			_stopButtonY = ctrlBtnY;
 			_stopButtonWidth = ctrlBtnSize;
 			_stopButtonHeight = ctrlBtnSize;
 			
-			_releaseButtonX = _stopButtonX + _stopButtonWidth + animCtrlMargin;
-			_releaseButtonY = modeBtnY;
+			_releaseButtonX = _stopButtonX + _stopButtonWidth + margin;
+			_releaseButtonY = ctrlBtnY;
 			_releaseButtonWidth = ctrlBtnSize;
 			_releaseButtonHeight = ctrlBtnSize;
 			
 			_prevButtonX = _playButtonX;
-			_prevButtonY = modeBtnY;
+			_prevButtonY = ctrlBtnY;
 			_prevButtonWidth = ctrlBtnSize;
 			_prevButtonHeight = ctrlBtnSize;
 			
 			_nextButtonX = _prevButtonX + imageCtrlMargin;
-			_nextButtonY = modeBtnY;
+			_nextButtonY = ctrlBtnY;
 			_nextButtonWidth = ctrlBtnSize;
 			_nextButtonHeight = ctrlBtnSize;
 		}

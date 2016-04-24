@@ -51,6 +51,18 @@ package
 					UISpec.getInstance().prevButtonX, UISpec.getInstance().prevButtonY,
 					UISpec.getInstance().prevButtonWidth, UISpec.getInstance().prevButtonHeight,
 					prevBtnTex);
+				
+				var scale:Number = _prevButton.scale;
+				if (_prevButton.width > UISpec.getInstance().prevButtonWidth)
+				{
+					scale = UISpec.getInstance().prevButtonWidth / _prevButton.width;
+					_prevButton.scale = scale;
+				}
+				if (_prevButton.height > UISpec.getInstance().prevButtonHeight)
+				{
+					scale = scale * UISpec.getInstance().prevButtonHeight / _prevButton.height;
+					_prevButton.scale = scale;
+				}
 				_prevButton.visible = visible;
 				_prevButton.addEventListener(TouchEvent.TOUCH, onClickPrevButton);
 				objects.push(_prevButton);
@@ -64,6 +76,18 @@ package
 					UISpec.getInstance().nextButtonX, UISpec.getInstance().nextButtonY,
 					UISpec.getInstance().nextButtonWidth, UISpec.getInstance().nextButtonHeight,
 					nextBtnTex);
+				
+				var scale:Number = _nextButton.scale;
+				if (_nextButton.width > UISpec.getInstance().nextButtonWidth)
+				{
+					scale = UISpec.getInstance().nextButtonWidth / _nextButton.width;
+					_nextButton.scale = scale;
+				}
+				if (_nextButton.height > UISpec.getInstance().nextButtonHeight)
+				{
+					scale = scale * UISpec.getInstance().nextButtonHeight / _nextButton.height;
+					_nextButton.scale = scale;
+				}
 				_nextButton.visible = visible;
 				_nextButton.addEventListener(TouchEvent.TOUCH, onClickNextButton);
 				objects.push(_nextButton);
@@ -155,6 +179,16 @@ package
 			super.dispose();
 		}
 		
+		public function set spriteButtonText(text:String):void
+		{
+			_spriteButton.text = text;
+		}
+		
+		public function get spriteButtonText():String
+		{
+			return _spriteButton.text;
+		}
+		
 		private function onClickSpriteButton(event:TouchEvent):void
 		{			
 			var action:Touch = event.getTouch(_spriteButton, TouchPhase.ENDED);
@@ -184,5 +218,6 @@ package
 				_onClickNextButton();				
 			}
 		}
+
 	}
 }

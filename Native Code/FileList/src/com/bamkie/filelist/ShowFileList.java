@@ -1,5 +1,6 @@
 package com.bamkie.filelist;
 
+import com.adobe.fre.FREArray;
 import com.adobe.fre.FREContext;
 import com.adobe.fre.FREFunction;
 import com.adobe.fre.FREInvalidObjectException;
@@ -9,7 +10,6 @@ import com.adobe.fre.FREWrongThreadException;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.util.Log;
 
 public class ShowFileList implements FREFunction {
 
@@ -18,32 +18,43 @@ public class ShowFileList implements FREFunction {
 	
 	private FREContext _context;
 	
-	private String tag = "ShowFileList";
-	
 	public FREObject call(FREContext context, FREObject[] objects)
-	{
-		
-Log.d(tag, "call");
-		
-		if (objects == null || objects.length <= 1)
+	{		
+		if (objects == null)
 		{
 			return null;
 		}
-			
-		String type = new String();
-		String[] items = new String[objects.length - 1];
 		
-		for (int i = 0; i < objects.length; i++)
+		FREArray data = (FREArray)objects[0];
+		long length = 0;
+		
+		try
+		{
+			length = data.getLength();
+		}
+		catch (FREInvalidObjectException e1)
+		{
+			e1.printStackTrace();
+		}
+		catch (FREWrongThreadException e1) 
+		{
+			e1.printStackTrace();
+		}
+				
+		String type = new String();
+		final String[] items = new String[(int)length - 1];
+		
+		for (int i = 0; i < (int)length; i++)
 		{
 			try
 			{
 				if (i != 0)
 				{
-					items[i] = objects[i].getAsString();
+					items[i - 1] = data.getObjectAt(i).getAsString();
 				}
 				else
 				{
-					type = objects[i].getAsString();
+					type = data.getObjectAt(i).getAsString();
 				}
 			}
 			catch (IllegalStateException e)
@@ -64,15 +75,11 @@ Log.d(tag, "call");
 			}
 		}
 		
-Log.d(tag, "objects saved");
-		
 		_context = context;	
 		
 		AlertDialog.Builder builder = new AlertDialog.Builder(_context.getActivity());
-				
-Log.d(tag, "builder");
-		
-		if (type == SPRITE_SHEET)
+						
+		if (type.compareTo(SPRITE_SHEET) == 0)
 		{
 			builder.setTitle("Select Sprite Sheet");
 			builder.setItems(items, new DialogInterface.OnClickListener() {
@@ -80,13 +87,13 @@ Log.d(tag, "builder");
 				@Override
 				public void onClick(DialogInterface dialog, int item) {
 					
-					_context.dispatchStatusEventAsync(SPRITE_SHEET, String.valueOf(item));
+					_context.dispatchStatusEventAsync(SPRITE_SHEET, items[item]);
 					dialog.dismiss();
 					_context.dispose();
 				}
 			});
 		}
-		else if (type == SPRITE)
+		else if (type.compareTo(SPRITE) == 0)
 		{
 			builder.setTitle("Select Sprite");
 			builder.setItems(items, new DialogInterface.OnClickListener() {
@@ -94,18 +101,14 @@ Log.d(tag, "builder");
 				@Override
 				public void onClick(DialogInterface dialog, int item) {
 					
-					_context.dispatchStatusEventAsync(SPRITE, String.valueOf(item));
+					_context.dispatchStatusEventAsync(SPRITE, items[item]);
 					dialog.dismiss();
 					_context.dispose();
 				}
 			});
 		}
-		
-Log.d(tag, "set AlertDialog");
-		
+
 		builder.show();
-		
-Log.d(tag, "show");
 		
 		return null;
 	}

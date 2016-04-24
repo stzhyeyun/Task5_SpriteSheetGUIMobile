@@ -8,7 +8,7 @@ package com.bamkie
 		private var _context:ExtensionContext;		
 		private var _onSelectItem:Function;
 		
-		public function FileList(onSelectItem:Function)
+		public function FileList(callback:Function)
 		{
 			try
 			{
@@ -23,7 +23,7 @@ package com.bamkie
 			}
 			
 			_context.addEventListener(StatusEvent.STATUS, onSelectItem);
-			_onSelectItem = onSelectItem;
+			_onSelectItem = callback;
 		}
 		
 		public function showFileList(objects:Array):void
@@ -41,7 +41,7 @@ package com.bamkie
 		
 		private function onSelectItem(event:StatusEvent):void
 		{
-			_onSelectItem(event.code, event.type);
+			_onSelectItem(event.code, event.level);
 		}
 	}
 }

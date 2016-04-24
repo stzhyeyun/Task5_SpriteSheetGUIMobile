@@ -1,7 +1,6 @@
 package
 {
 	import com.bamkie.FileList;
-	import com.bamkie.FileManager;
 	import com.bamkie.Terminator;
 	import com.bamkie.ToastExtension;
 	
@@ -79,7 +78,8 @@ package
 					var filename:String = File(files[i]).name;
 					_dataList.push(filename.substring(0, filename.indexOf(".")));
 				}
-			}
+			}			
+			_dataList.sort();
 			
 			InputManager.getInstance().loadRequest(
 				ResourceType.UI_ASSET, _dataFolder, "icons",
@@ -123,13 +123,11 @@ package
 					addChild(imgModeUI[i]);
 				}
 			}
-			
-			UISpec.getInstance().dispose();
 		}
 		
 		/**
 		 * 실질적 View 영역보다 큰 스프라이트의 크기를 조정합니다. 
-		 * @param item 크기를 조정하고자 하는 DisplayObject입니다.
+		 * @param item 크기를 조정하고자 하는 DisplayOfbject입니다.
 		 * @return 크기가 조정된 DisplayObject를 반환합니다.
 		 * 
 		 */
@@ -139,17 +137,18 @@ package
 			
 			if (item.width > UISpec.getInstance().actualViewAreaWidth)
 			{
-				scale = scale * UISpec.getInstance().actualViewAreaWidth / item.width; 
+				scale = UISpec.getInstance().actualViewAreaWidth / item.width;
+				item.scale = scale;
 			}
-			
+						
 			if (item.height > UISpec.getInstance().actualViewAreaHeight)
 			{
 				scale = scale * UISpec.getInstance().actualViewAreaHeight / item.height;
+				item.scale = scale;
 			}
-			
-			item.scale = scale;
+						
 			item.x = (_viewArea.width / 2) - (item.width / 2);
-			item.y = (_viewArea.height / 2) - (item.height / 2);
+			item.y = (_viewArea.height / 2) - (item.height / 2) - UISpec.getInstance().playButtonHeight;
 			
 			return item;
 		}
@@ -256,20 +255,11 @@ package
 		 */
 		private function onClickImportButton(event:TouchEvent):void
 		{			
-//			var action:Touch = event.getTouch(_importButton, TouchPhase.ENDED);
-//			
-//			if (action)
-//			{
-//				if (_importButton.isIn(action.getLocation(this)))
-//				{
-//					if (!_dataFolder)
-//					{
-//						_dataFolder = File.applicationDirectory.resolvePath("data");
-//					}
-//					_dataFolder.addEventListener(Event.SELECT, onSelectFile);
-//					_dataFolder.browseForOpen("");
-//				}
-//			}
+			if (!_toaster)
+			{
+				_toaster = new ToastExtension();
+			}
+			_toaster.toast("Under construction..."); 
 		}
 		
 		/**
@@ -332,6 +322,8 @@ package
 				{
 					resetAnimator();
 					
+					ImageMode(_modes[Mode.IMAGE_MODE]).spriteButtonText = "Select Sprite";
+					
 					InputManager.getInstance().loadRequest(
 						ResourceType.SPRITE_SHEET, _dataFolder, item,
 						onCompleteSpriteSheetLoad, true);
@@ -340,27 +332,25 @@ package
 				
 				case SPRITE:
 				{
-//					_viewArea.getChildByName(_selectedSpriteSheet.spriteSheet.name).visible = false;
-//					
-//					if (_currSpriteIndex >= 0)
-//					{
-//						_viewArea.getChildByName(_selectedSpriteSheet.sprites[_currSpriteIndex].name).visible = false;	
-//					}
-//					
-//					if (prevItemName)
-//					{
-//						var object:DisplayObject = _viewArea.getChildByName(prevItemName);
-//						
-//						if (object)
-//						{
-//							object.visible = false;
-//						}
-//					}
-//					
-//					_viewArea.addChild(adjustViewingItem(_selectedSpriteSheet.find(currItemName)));
-//					_viewArea.getChildByName(currItemName).visible = true;
-//					
-//					_currSpriteIndex = _selectedSpriteSheet.getIndex(currItemName);
+					_viewArea.getChildByName(_selectedSpriteSheet.spriteSheet.name).visible = false;
+					
+					if (_currSpriteIndex >= 0)
+					{
+						_viewArea.getChildByName(_selectedSpriteSheet.sprites[_currSpriteIndex].name).visible = false;	
+					}
+					
+					var object:DisplayObject = _viewArea.getChildByName(ImageMode(_modes[Mode.IMAGE_MODE]).spriteButtonText);
+					if (object)
+					{
+						object.visible = false;
+					}
+					
+					_viewArea.addChild(adjustViewingItem(_selectedSpriteSheet.find(item)));
+					_viewArea.getChildByName(item).visible = true;
+					
+					ImageMode(_modes[Mode.IMAGE_MODE]).spriteButtonText = item;
+					
+					_currSpriteIndex = _selectedSpriteSheet.getIndex(item);
 				}
 					break;
 			}
@@ -435,15 +425,15 @@ package
 			
 			// @this
 			cleanAnimator();
+			var index:int = _dataList.indexOf(name);
+			_dataList[index] = null;
+			_dataList.removeAt(index);
 			
 			// @_spriteSheetButton
-//			_spriteSheetBox.removeItem(name);
+			_spriteSheetButton.text = SPRITE_SHEET_BTN_MSG;
 			
 			// @InputManager
 			InputManager.getInstance().releaseRequest(name);
-			
-			// 앱 저장소에서 삭제
-			
 		}
 
 		/**
@@ -465,14 +455,16 @@ package
 			}
 			
 			var names:Array = new Array(_selectedSpriteSheet.sprites.length + 1);
-			for (var i:int = 0; i < _selectedSpriteSheet.sprites.length; i++)
+			for (var i:int = 0; i < names.length; i++)
 			{
-				if (i == 0)
+				if (i != 0)
+				{
+					names[i] = _selectedSpriteSheet.sprites[i - 1].name;	
+				}
+				else
 				{
 					names[i] = SPRITE;
 				}
-				
-				names[i] = _selectedSpriteSheet.sprites[i].name;
 			}
 						
 			if (!_fileLister)
@@ -510,6 +502,8 @@ package
 			
 			_viewArea.addChild(adjustViewingItem(_selectedSpriteSheet.sprites[_currSpriteIndex]));
 			_viewArea.getChildByName(_selectedSpriteSheet.sprites[_currSpriteIndex].name).visible = true;
+			
+			ImageMode(_modes[Mode.IMAGE_MODE]).spriteButtonText = _selectedSpriteSheet.sprites[_currSpriteIndex].name;
 		}
 		
 		/**
@@ -540,6 +534,8 @@ package
 			
 			_viewArea.addChild(adjustViewingItem(_selectedSpriteSheet.sprites[_currSpriteIndex]));
 			_viewArea.getChildByName(_selectedSpriteSheet.sprites[_currSpriteIndex].name).visible = true;
+			
+			ImageMode(_modes[Mode.IMAGE_MODE]).spriteButtonText = _selectedSpriteSheet.sprites[_currSpriteIndex].name;
 		}
 		
 		/**
@@ -582,6 +578,9 @@ package
 								object.visible = false;
 							}
 						}
+						
+						_spriteSheetButton.text = SPRITE_SHEET_BTN_MSG;
+						_selectedSpriteSheet = null;
 					}
 					
 					_currMode = target.text;
@@ -598,6 +597,7 @@ package
 						resetAnimator();
 						
 						_spriteSheetButton.text = SPRITE_SHEET_BTN_MSG;
+						_selectedSpriteSheet = null;
 					}
 					
 					_currMode = target.text;

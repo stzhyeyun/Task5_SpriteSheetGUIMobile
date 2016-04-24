@@ -37,6 +37,18 @@ package
 					UISpec.getInstance().playButtonX, UISpec.getInstance().playButtonY,
 					UISpec.getInstance().playButtonWidth, UISpec.getInstance().playButtonHeight,
 					playBtnTex);
+				
+				var scale:Number = _playButton.scale;
+				if (_playButton.width > UISpec.getInstance().playButtonWidth)
+				{
+					scale = UISpec.getInstance().playButtonWidth / _playButton.width;
+					_playButton.scale = scale;
+				}
+				if (_playButton.height > UISpec.getInstance().playButtonHeight)
+				{
+					scale = scale * UISpec.getInstance().playButtonHeight / _playButton.height;
+					_playButton.scale = scale;
+				}
 				_playButton.visible = visible;
 				_playButton.addEventListener(TouchEvent.TOUCH, onClickPlayButton);
 				objects.push(_playButton);
@@ -50,6 +62,18 @@ package
 					UISpec.getInstance().stopButtonX, UISpec.getInstance().stopButtonY,
 					UISpec.getInstance().stopButtonWidth, UISpec.getInstance().stopButtonHeight,
 					stopBtnTex);
+				
+				var scale:Number = _stopButton.scale;
+				if (_stopButton.width > UISpec.getInstance().stopButtonWidth)
+				{
+					scale = UISpec.getInstance().stopButtonWidth / _stopButton.width;
+					_stopButton.scale = scale;
+				}
+				if (_stopButton.height > UISpec.getInstance().stopButtonHeight)
+				{
+					scale = scale * UISpec.getInstance().stopButtonHeight / _stopButton.height;
+					_stopButton.scale = scale;
+				}
 				_stopButton.visible = visible;
 				_stopButton.addEventListener(TouchEvent.TOUCH, onClickStopButton);
 				objects.push(_stopButton);
@@ -63,6 +87,18 @@ package
 					UISpec.getInstance().releaseButtonX, UISpec.getInstance().releaseButtonY,
 					UISpec.getInstance().releaseButtonWidth, UISpec.getInstance().releaseButtonHeight,
 					releaseBtnTex);
+				
+				var scale:Number = _releaseButton.scale;
+				if (_releaseButton.width > UISpec.getInstance().releaseButtonWidth)
+				{
+					scale = UISpec.getInstance().releaseButtonWidth / _releaseButton.width;
+					_releaseButton.scale = scale;
+				}
+				if (_releaseButton.height > UISpec.getInstance().releaseButtonHeight)
+				{
+					scale = scale * UISpec.getInstance().releaseButtonHeight / _releaseButton.height;
+					_releaseButton.scale = scale;
+				}
 				_releaseButton.visible = visible;
 				_releaseButton.addEventListener(TouchEvent.TOUCH, onClickReleaseButton);
 				objects.push(_releaseButton);
